@@ -10,7 +10,7 @@ Answer_one = input(
 if Answer_one == str(16) or Answer_one == "sixteen".lower():
     print("Correct!")
     counter += 1
-elif Answer_one != 16 or Answer_one == "sixteen".lower():
+elif Answer_one != 16 or Answer_one != "sixteen".lower():
     print("Sorry Wrong Answer")
 
 Answer_two = input("Next question! What is Obama's last name?").lower()
@@ -30,7 +30,7 @@ elif Answer_three != "C".lower() or "-2":
     print("Sorry wrong answer!")
 
 Answer_four = input(
-    "Next question! What is the name of the person in the famous painting known as the Mona Lisa").lower()
+    "Next question! What is the first name of the person in the famous painting known as the Mona Lisa").lower()
 
 if Answer_four == "Lisa".lower():
     print("Correct!")
@@ -40,10 +40,10 @@ elif Answer_four != "Lisa".lower():
 
 Answer_five = input("Next question! What is 3 x 3 - 4?").lower()
 
-if Answer_five == 5:
+if Answer_five == "5" or Answer_five == "Five".lower():
     print("Correct!")
     counter += 1
-elif Answer_five != 5:
+elif Answer_five != "5" or Answer_five != "Five".lower():
     print("incorrect")
 
 print(f"{int(counter) / 5 * 100} %")
