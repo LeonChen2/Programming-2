@@ -100,7 +100,7 @@ def main():
             print(score)
 
         enemy_collision = pygame.sprite.spritecollide(player, enemy_sprite, True)
-            pygame.quit()
+        pygame.quit()
             print("game over")
 
         # ----- DRAW
