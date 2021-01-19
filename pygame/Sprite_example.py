@@ -45,6 +45,13 @@ class Player(pygame.sprite.Sprite):
 
         self.rect.center = pygame.mouse.get_pos()
 
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        super(). __init__()
+
+        self.image = pygame.image.load()
+
+
 def main():
     pygame.init()
 
@@ -61,6 +68,7 @@ def main():
     # Sprite group and sprite creation
     all_sprites_group = pygame.sprite.Group()
     jewels_group = pygame.sprite.Group()
+    enemy_sprite
 
     # jewel creation
     for i in range(NUM_JEWELS):
@@ -90,6 +98,10 @@ def main():
         for jewel in jewel_collected:
             score += 1
             print(score)
+
+        enemy_collision = pygame.sprite.spritecollide(player, enemy_sprite, True)
+            pygame.quit()
+            print("game over")
 
         # ----- DRAW
         screen.fill(BLACK)
