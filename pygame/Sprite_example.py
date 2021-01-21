@@ -1,39 +1,41 @@
-# sprite_example.py
-# Introduction to the sprite class
 
-#Goals:
-#   * introduce the sprite class
-#   * subclass the sprite class (inheritance)
+# sprite_example.py
+# Introduction to the Sprite class
+
+# Goals:
+#   * introduce the Sprite class
+#   * subclass the Sprite class (inheritance)
+
 import random
 import pygame
-
 
 # ----- CONSTANTS
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 YELLOW = (255, 255, 0)
 SKY_BLUE = (95, 165, 228)
-WIDTH = 1920
-HEIGHT = 1080
+WIDTH = 1280
+HEIGHT = 720
 TITLE = "Sprite Example"
 NUM_JEWELS = 75
 
 
 class Jewel(pygame.sprite.Sprite):
     def __init__(self):
-        # Call the superclass constructor
+        # call the superclass constructor
         super().__init__()
 
-        # Image is a surface
-        self.image = pygame.Surface((35,20))
+        # Image is a Surface
+        self.image = pygame.Surface((35, 20))
         self.image.fill((100, 255, 100))
 
         # Rect is Rectangle (x, y, width, height)
         self.rect = self.image.get_rect()
 
+
 class Player(pygame.sprite.Sprite):
     def __init__(self):
-        super(). __init__()
+        super().__init__()
 
         self.image = pygame.image.load("./images/link.png")
 
@@ -41,15 +43,8 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         """Changes the position of the player
-        Based on the mouse's position"""
-
+        based on the mouse's position"""
         self.rect.center = pygame.mouse.get_pos()
-
-class Enemy(pygame.sprite.Sprite):
-    def __init__(self):
-        super(). __init__()
-
-        self.image = pygame.image.load()
 
 
 def main():
@@ -57,7 +52,7 @@ def main():
 
     # ----- SCREEN PROPERTIES
     size = (WIDTH, HEIGHT)
-    screen = pygame.display.set_mode(size)
+    screen = pygame.display.set_mode(size, flags=pygame.SCALED)
     pygame.display.set_caption(TITLE)
 
     # ----- LOCAL VARIABLES
@@ -66,22 +61,23 @@ def main():
     score = 0
 
     # Sprite group and sprite creation
-    all_sprites_group = pygame.sprite.Group()
+    all_sprites_group = pygame.sprite.RenderUpdates()
     jewels_group = pygame.sprite.Group()
-    enemy_sprite
 
-    # jewel creation
+    # Jewel creation
     for i in range(NUM_JEWELS):
         jewel = Jewel()
-        # spawn inside the visible screen
+        # Spawn inside the visible screen
         jewel.rect.x = random.randrange(WIDTH - jewel.rect.width)
         jewel.rect.y = random.randrange(HEIGHT - jewel.rect.height)
         all_sprites_group.add(jewel)
         jewels_group.add(jewel)
 
-    # player creation
+    # Player creation
     player = Player()
     all_sprites_group.add(player)
+
+    dirty_rectangles = []
 
     # ----- MAIN LOOP
     while not done:
@@ -94,21 +90,17 @@ def main():
         all_sprites_group.update()
 
         # Player collides with jewel
-        jewel_collected = pygame.sprite.spritecollide(player, jewels_group, True)
-        for jewel in jewel_collected:
+        jewels_collected = pygame.sprite.spritecollide(player, jewels_group, True)
+        for jewel in jewels_collected:
             score += 1
             print(score)
 
-        enemy_collision = pygame.sprite.spritecollide(player, enemy_sprite, True)
-        pygame.quit()
-            print("game over")
-
         # ----- DRAW
         screen.fill(BLACK)
-        all_sprites_group.draw(screen)
+        dirty_rectangles = all_sprites_group.draw(screen)
 
         # ----- UPDATE
-        pygame.display.flip()
+        pygame.display.update(dirty_rectangles)
         clock.tick(60)
 
     pygame.quit()
@@ -116,3 +108,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
