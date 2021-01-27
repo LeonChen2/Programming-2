@@ -57,11 +57,11 @@ class Rectangle(pygame.sprite.Sprite):
 
     def go_left(self):
         """ Called when the user hits the left arrow. """
-        self.vel_x = -3
+        self.vel_x = -5
 
     def go_right(self):
         """ Called when the user hits the right arrow. """
-        self.vel_x = 3
+        self.vel_x = 5
 
     def stop(self):
         """ Called when the user lets off the keyboard. """
@@ -69,11 +69,14 @@ class Rectangle(pygame.sprite.Sprite):
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, colour=RED):
+        super().__init__()
         self.width, self.height = (60, 30)
         self.x, self.y = (400, 200)
-        super().__init__()
 
         self.colour = colour
+        
+        self.vel_x = 0
+        self.vel_y = 0
 
     def draw(self, screen):
         pygame.draw.rect(
@@ -92,7 +95,42 @@ class Enemy(pygame.sprite.Sprite):
             self.vel_x *= 0
         if self.y + self.height > HEIGHT or self.y < 0:
             self.vel_y *= 0
+            
+class Ball(pygame.sprite.Sprite):
+    def __init__(self, colour=YELLOW):
+        super().__init__()
+        self.image = pygame.Surface((10, 10))
+        pygame.draw.circle(self.image, (255, 255, 0), (5, 5), 5, 10)
+#         self.radius, self.width = (5, 10)
+        self.rect = self.image.get_rect()
+        self.rect.x = 400
+        self.rect.y = 300
+        self.vel_x = 3
+        self.vel_y = 3
+    
+    def drawCircle(self, screen):
+        pygame.draw.circle(screen, (255, 255, 0), (400, 300), 5, 10)
+        
+    def update(self):
+        self.rect.x += self.vel_x
+        self.rect.y += self.vel_y
+        
+        if self.rect.right > WIDTH or self.rect.x < 0:
+            self.vel_x *= -1
+        if self.rect.y < 0:
+            self.vel_y *= -1
+            
+        #ball_hit_list = pygame.sprite.spritecollide(self, self.rect.rectangle, False)
+        #for ball in ball_hit_list:
+           # if self.vel_y > 0:
+           #     self.rect.bottom = ball.rect.top
+           #     self.vel_y *= -1
+           # elif self.vel_y < 0:
+           #     self.rect.top = ball.rect.bottom
+            
+        print(self.rect.x, self.rect.y)
 
+        
 
 def main():
     pygame.init()
@@ -113,7 +151,11 @@ def main():
 
     # --- player
     rectangle = Rectangle()
-    enemy = Rectangle()
+    enemy = Enemy()
+    ball = Ball()
+    
+    all_sprites_group = pygame.sprite.Group()
+    all_sprites_group.add(ball)
 
     # ----- MAIN LOOP
     while not done:
@@ -145,10 +187,15 @@ def main():
         # update
         rectangle.update()
         enemy.update()
+#         ball.update()
+        all_sprites_group.update()
 
         # ----- DRAW
         screen.fill(BLACK)
         rectangle.draw(screen)
+        enemy.draw(screen)
+#         ball.drawCircle(screen)
+        all_sprites_group.draw(screen)
 
         # ----- UPDATE
         pygame.display.flip()
